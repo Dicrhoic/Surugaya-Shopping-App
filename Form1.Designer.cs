@@ -30,6 +30,9 @@
         {
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.menuToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.updateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.listsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.createListToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sidePanel = new System.Windows.Forms.Panel();
             this.panel10 = new System.Windows.Forms.Panel();
             this.listView1 = new System.Windows.Forms.ListView();
@@ -40,8 +43,10 @@
             this.panel8 = new System.Windows.Forms.Panel();
             this.panel7 = new System.Windows.Forms.Panel();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
+            this.itemsRB = new System.Windows.Forms.RadioButton();
             this.wishListRB = new System.Windows.Forms.RadioButton();
             this.cartRB = new System.Windows.Forms.RadioButton();
+            this.statusStrip = new System.Windows.Forms.ToolStrip();
             this.searchPanel = new System.Windows.Forms.Panel();
             this.loadItemBtn = new System.Windows.Forms.Button();
             this.panel4 = new System.Windows.Forms.Panel();
@@ -52,12 +57,12 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.panel1 = new System.Windows.Forms.Panel();
             this.productPanel = new System.Windows.Forms.Panel();
-            this.priceTag = new System.Windows.Forms.Label();
             this.productImage = new System.Windows.Forms.PictureBox();
+            this.panel11 = new System.Windows.Forms.Panel();
+            this.priceTag = new System.Windows.Forms.Label();
             this.productInfo = new System.Windows.Forms.RichTextBox();
             this.panel6 = new System.Windows.Forms.Panel();
             this.panel5 = new System.Windows.Forms.Panel();
-            this.mainPanel = new System.Windows.Forms.Panel();
             this.menuStrip1.SuspendLayout();
             this.sidePanel.SuspendLayout();
             this.controlPanel.SuspendLayout();
@@ -66,12 +71,15 @@
             this.searchBarPanel.SuspendLayout();
             this.productPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.productImage)).BeginInit();
+            this.panel11.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menuToolStripMenuItem});
+            this.menuToolStripMenuItem,
+            this.updateToolStripMenuItem,
+            this.listsToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1184, 24);
@@ -83,6 +91,27 @@
             this.menuToolStripMenuItem.Name = "menuToolStripMenuItem";
             this.menuToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
             this.menuToolStripMenuItem.Text = "Menu";
+            // 
+            // updateToolStripMenuItem
+            // 
+            this.updateToolStripMenuItem.Name = "updateToolStripMenuItem";
+            this.updateToolStripMenuItem.Size = new System.Drawing.Size(118, 20);
+            this.updateToolStripMenuItem.Text = "Update Item Prices";
+            this.updateToolStripMenuItem.Click += new System.EventHandler(this.UpdateItemsData);
+            // 
+            // listsToolStripMenuItem
+            // 
+            this.listsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.createListToolStripMenuItem});
+            this.listsToolStripMenuItem.Name = "listsToolStripMenuItem";
+            this.listsToolStripMenuItem.Size = new System.Drawing.Size(42, 20);
+            this.listsToolStripMenuItem.Text = "Lists";
+            // 
+            // createListToolStripMenuItem
+            // 
+            this.createListToolStripMenuItem.Name = "createListToolStripMenuItem";
+            this.createListToolStripMenuItem.Size = new System.Drawing.Size(129, 22);
+            this.createListToolStripMenuItem.Text = "Create List";
             // 
             // sidePanel
             // 
@@ -155,6 +184,7 @@
             this.button1.TabIndex = 10;
             this.button1.Text = "Remove Item";
             this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.RemoveItemFromWL);
             // 
             // panel8
             // 
@@ -174,6 +204,7 @@
             // 
             // flowLayoutPanel1
             // 
+            this.flowLayoutPanel1.Controls.Add(this.itemsRB);
             this.flowLayoutPanel1.Controls.Add(this.wishListRB);
             this.flowLayoutPanel1.Controls.Add(this.cartRB);
             this.flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
@@ -182,27 +213,49 @@
             this.flowLayoutPanel1.Size = new System.Drawing.Size(402, 35);
             this.flowLayoutPanel1.TabIndex = 0;
             // 
+            // itemsRB
+            // 
+            this.itemsRB.AutoSize = true;
+            this.itemsRB.Location = new System.Drawing.Point(3, 3);
+            this.itemsRB.Name = "itemsRB";
+            this.itemsRB.Size = new System.Drawing.Size(70, 19);
+            this.itemsRB.TabIndex = 2;
+            this.itemsRB.Text = "Item List";
+            this.itemsRB.UseVisualStyleBackColor = true;
+            // 
             // wishListRB
             // 
             this.wishListRB.AutoSize = true;
-            this.wishListRB.Location = new System.Drawing.Point(3, 3);
+            this.wishListRB.Location = new System.Drawing.Point(79, 3);
             this.wishListRB.Name = "wishListRB";
             this.wishListRB.Size = new System.Drawing.Size(72, 19);
             this.wishListRB.TabIndex = 0;
             this.wishListRB.TabStop = true;
             this.wishListRB.Text = "Wish List";
             this.wishListRB.UseVisualStyleBackColor = true;
+            this.wishListRB.CheckedChanged += new System.EventHandler(this.ChangeListData);
             // 
             // cartRB
             // 
             this.cartRB.AutoSize = true;
-            this.cartRB.Location = new System.Drawing.Point(81, 3);
+            this.cartRB.Location = new System.Drawing.Point(157, 3);
             this.cartRB.Name = "cartRB";
             this.cartRB.Size = new System.Drawing.Size(47, 19);
             this.cartRB.TabIndex = 1;
             this.cartRB.TabStop = true;
             this.cartRB.Text = "Cart";
             this.cartRB.UseVisualStyleBackColor = true;
+            // 
+            // statusStrip
+            // 
+            this.statusStrip.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.statusStrip.Location = new System.Drawing.Point(0, 0);
+            this.statusStrip.Name = "statusStrip";
+            this.statusStrip.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
+            this.statusStrip.Size = new System.Drawing.Size(762, 28);
+            this.statusStrip.Stretch = true;
+            this.statusStrip.TabIndex = 0;
+            this.statusStrip.Text = "toolStrip1";
             // 
             // searchPanel
             // 
@@ -227,6 +280,7 @@
             this.loadItemBtn.TabIndex = 8;
             this.loadItemBtn.Text = "Load Item";
             this.loadItemBtn.UseVisualStyleBackColor = true;
+            this.loadItemBtn.Click += new System.EventHandler(this.LoadItem);
             // 
             // panel4
             // 
@@ -295,16 +349,37 @@
             // 
             // productPanel
             // 
-            this.productPanel.Controls.Add(this.priceTag);
             this.productPanel.Controls.Add(this.productImage);
+            this.productPanel.Controls.Add(this.panel11);
+            this.productPanel.Controls.Add(this.priceTag);
             this.productPanel.Controls.Add(this.productInfo);
             this.productPanel.Controls.Add(this.panel6);
             this.productPanel.Controls.Add(this.panel5);
-            this.productPanel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.productPanel.Location = new System.Drawing.Point(831, 94);
+            this.productPanel.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.productPanel.Location = new System.Drawing.Point(402, 94);
             this.productPanel.Name = "productPanel";
-            this.productPanel.Size = new System.Drawing.Size(353, 867);
+            this.productPanel.Size = new System.Drawing.Size(782, 867);
             this.productPanel.TabIndex = 4;
+            // 
+            // productImage
+            // 
+            this.productImage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.productImage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.productImage.Location = new System.Drawing.Point(10, 139);
+            this.productImage.Name = "productImage";
+            this.productImage.Size = new System.Drawing.Size(762, 728);
+            this.productImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.productImage.TabIndex = 13;
+            this.productImage.TabStop = false;
+            // 
+            // panel11
+            // 
+            this.panel11.Controls.Add(this.statusStrip);
+            this.panel11.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel11.Location = new System.Drawing.Point(10, 111);
+            this.panel11.Name = "panel11";
+            this.panel11.Size = new System.Drawing.Size(762, 28);
+            this.panel11.TabIndex = 12;
             // 
             // priceTag
             // 
@@ -316,17 +391,6 @@
             this.priceTag.Size = new System.Drawing.Size(0, 15);
             this.priceTag.TabIndex = 11;
             // 
-            // productImage
-            // 
-            this.productImage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.productImage.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.productImage.Location = new System.Drawing.Point(10, 203);
-            this.productImage.Name = "productImage";
-            this.productImage.Size = new System.Drawing.Size(333, 664);
-            this.productImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.AutoSize;
-            this.productImage.TabIndex = 10;
-            this.productImage.TabStop = false;
-            // 
             // productInfo
             // 
             this.productInfo.Dock = System.Windows.Forms.DockStyle.Top;
@@ -334,7 +398,7 @@
             this.productInfo.Location = new System.Drawing.Point(10, 0);
             this.productInfo.Name = "productInfo";
             this.productInfo.ReadOnly = true;
-            this.productInfo.Size = new System.Drawing.Size(333, 96);
+            this.productInfo.Size = new System.Drawing.Size(762, 96);
             this.productInfo.TabIndex = 9;
             this.productInfo.Text = "";
             // 
@@ -349,25 +413,16 @@
             // panel5
             // 
             this.panel5.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel5.Location = new System.Drawing.Point(343, 0);
+            this.panel5.Location = new System.Drawing.Point(772, 0);
             this.panel5.Name = "panel5";
             this.panel5.Size = new System.Drawing.Size(10, 867);
             this.panel5.TabIndex = 6;
-            // 
-            // mainPanel
-            // 
-            this.mainPanel.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.mainPanel.Location = new System.Drawing.Point(402, 94);
-            this.mainPanel.Name = "mainPanel";
-            this.mainPanel.Size = new System.Drawing.Size(429, 867);
-            this.mainPanel.TabIndex = 5;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1184, 961);
-            this.Controls.Add(this.mainPanel);
             this.Controls.Add(this.productPanel);
             this.Controls.Add(this.searchPanel);
             this.Controls.Add(this.sidePanel);
@@ -390,6 +445,8 @@
             this.productPanel.ResumeLayout(false);
             this.productPanel.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.productImage)).EndInit();
+            this.panel11.ResumeLayout(false);
+            this.panel11.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -402,7 +459,6 @@
         private Panel sidePanel;
         private Panel searchPanel;
         private Panel productPanel;
-        private Panel mainPanel;
         private Panel searchBarPanel;
         private TextBox urlInputTB;
         private Button addItemBtn;
@@ -414,7 +470,6 @@
         private Panel panel5;
         private Panel panel6;
         private RichTextBox productInfo;
-        private PictureBox productImage;
         private Panel controlPanel;
         private Button button2;
         private Button button1;
@@ -427,5 +482,12 @@
         private Panel panel9;
         private ListView listView1;
         private Panel panel10;
+        private Panel panel11;
+        private PictureBox productImage;
+        private RadioButton itemsRB;
+        private ToolStrip statusStrip;
+        private ToolStripMenuItem updateToolStripMenuItem;
+        private ToolStripMenuItem listsToolStripMenuItem;
+        private ToolStripMenuItem createListToolStripMenuItem;
     }
 }

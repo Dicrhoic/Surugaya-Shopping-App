@@ -7,6 +7,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Security.Policy;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -49,7 +50,7 @@ namespace ShoppingHelper.Classes
         }
 
         public void DisplayProduct(Item item)
-        {
+        {   
             origin = Application.OpenForms["Form1"];
             var panel1 = origin.Controls["productPanel"];
             PictureBox imageHolder = (PictureBox)panel1.Controls["productImage"];
@@ -66,6 +67,17 @@ namespace ShoppingHelper.Classes
             string imageLink = item.image;
             Debug.WriteLine(imageLink);
             imageHolder.Load(imageLink);
+            imageHolder.MouseClick += ImageHolder_MouseClick;
+        }
+
+        private void ImageHolder_MouseClick(object? sender, MouseEventArgs e)
+        {
+            if(currentItem!= null)
+            {
+                string url = currentItem.link;
+                System.Diagnostics.Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
+            }
+          
         }
 
         public async Task<bool> ProductRetrievedFromURI(string passedURL)
@@ -231,34 +243,6 @@ namespace ShoppingHelper.Classes
             }
         }
 
-        public void CreateWishlistOne()
-        {
-            string queryString = CreateWishlist("abc");
-            try
-            {
-                using (SqliteConnection connection = new SqliteConnection(
-                        GetConnectionString()))
-                {
-
-                    Debug.WriteLine(connection.Database);
-                    Debug.WriteLine(queryString);
-                    SqliteCommand command = new SqliteCommand(
-                    queryString, connection);
-                    connection.Open();
-                    command.ExecuteNonQuery();
-                    connection.Close();
-
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Error: {ex.Message}");
-                MBHelper mB = new MBHelper();
-                string caption = $"Error Adding to DB";
-                mB.ErrorMB(ex.Message, caption);
-            }
-        }
-
         private void UpdateWishListData(string str)
         {
             string queryString = UpdateQueryWL();
@@ -291,6 +275,35 @@ namespace ShoppingHelper.Classes
                 mB.ErrorMB(ex.Message, caption);
             }
         }
+
+        public async Task<bool> UpdatedItem(Item item)
+        {
+
+            string queryString = UpdateQueryWL();
+            string caption;
+            string message;
+            Item existingItem = QueriedItem(item.Name);
+            WishList list = WishListData();
+            if (list == null)
+            {
+                Debug.WriteLine("Error list is null");
+            }
+            if (list != null)
+            {
+                string productString = list.productString;
+                Debug.WriteLine($"Current ps: {productString}");
+                if (item != null)
+                {
+                    AddItemToDB(item);
+                    await Task.Delay(90);
+                    return true;
+                }
+            }
+            return false;
+
+
+        }
+
 
         public async Task<bool> AddedToWishList(Item item)
         {   
@@ -331,6 +344,60 @@ namespace ShoppingHelper.Classes
             return false;
         
             
+        }
+
+        public async Task<bool> RemovedFromWishList(Item item)
+        {   
+
+            string queryString = UpdateQueryWL();
+            string caption;
+            string message;
+            Item existingItem = QueriedItem(item.Name);
+            WishList list = WishListData();
+            if (list == null)
+            {
+                Debug.WriteLine("Error list is null");
+            }
+            if (list != null)
+            {
+                string name = item.Name;
+                string productString = list.productString;
+                if (!productString.Contains(name))
+                {
+                    caption = $"Cannot remove {name} from wishlist";
+                    message = $"Remove Error: {name} is not it in wishlist.";
+                    MBHelper mB = new();
+                    mB.ErrorMB(message, caption);
+                    return false;
+                }
+                Debug.WriteLine($"Current ps: {productString}");
+                if (productString.Contains(name))
+                {
+                    string opt1 = $",{name}";
+                    string opt2 = $"{name},";
+                    string newQuery = "";
+                    if (productString.Contains(opt1))
+                    {
+                        newQuery = productString.Replace(opt1, "");
+                    }
+                    if (productString.Contains(opt2))
+                    {
+                        newQuery = productString.Replace(opt2, "");
+                    }
+                    UpdateWishListData(newQuery);
+                    await Task.Delay(1);
+                    caption = $"Removed {name} from wishlist";
+                    message = $"{name} removed from wishlist.";
+                    MBHelper mB = new();
+                    mB.SuccessMB(message, caption);
+                    return true;
+                }
+
+
+            }
+            return false;
+
+
         }
 
         public List<Item> Products()
@@ -475,6 +542,8 @@ namespace ShoppingHelper.Classes
             return item;
 
         }
+
+       
     }
 
 
